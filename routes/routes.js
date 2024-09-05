@@ -4,7 +4,26 @@ const User = require('../models/user.js');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const JWT_SECRET = process.env.JWT_SECRET;
+// JWT secret keys from environment variables
+const JWT_SECRET = process.env.JWT_SECRET; // Secret key for access tokens
+const REFRESH_SECRET = process.env.REFRESH_SECRET; // Secret key for refresh tokens
+
+// In-memory storage for refresh tokens (can be replaced by a database)
+const refreshTokens = [];
+
+// Function to generate an access token with a short expiration time 5sec
+const generateAccessToken = (user) => {
+    return jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '5s' });
+};
+
+// Function to generate a refresh token with a expiration time 7 days
+const generateRefreshToken = (user) => {
+    const refreshToken = jwt.sign({ _id: user._id }, REFRESH_SECRET, { expiresIn: '7d' });
+
+    refreshTokens.push(refreshToken); // Store the refresh token in memory (can be stored in a database)
+    return refreshToken;
+};
+
 
 router.post('/register', async (req, res) => {
     try {
@@ -33,8 +52,42 @@ router.post('/login', async (req, res) => {
         return res.status(400).send({ message: 'invalid credentials' });
     }
 
-    const token = jwt.sign({ _id: user._id }, JWT_SECRET);
-    res.send({ message: 'success', accessToken: token });
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    res.send({
+        message: 'success',
+        accessToken: accessToken,
+        refreshToken: refreshToken
+    });
+});
+
+router.post('/token', (req, res) => {
+    // Extract the refresh token from the request body
+    const refreshToken = req.body.refreshToken;
+
+    // If no refresh token is provided, return a 401 error (unauthenticated)
+    if (!refreshToken) {
+        return res.status(401).send({ message: 'unauthenticated' });
+    }
+
+    // If the provided refresh token is not valid (not in the stored list), return a 403 error (forbidden)
+    if (!refreshTokens.includes(refreshToken)) {
+        return res.status(403).send({ message: 'invalid refresh token' });
+    }
+
+    // Verify the validity of the refresh token
+    jwt.verify(refreshToken, REFRESH_SECRET, (err, user) => {
+        if (err) {
+            // If the token is invalid, return a 403 error
+            return res.status(403).send({ message: 'invalid refresh token' });
+        }
+
+        // If valid, generate a new access token
+        const accessToken = generateAccessToken(user);
+        // Send the new access token as a response
+        res.send({ accessToken });
+    });
 });
 
 router.get('/user', async (req, res) => {
@@ -69,13 +122,7 @@ router.put('/edit-profile', async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split(' ')[1];
-        const { 
-            name, 
-            gender, 
-            phno, 
-            email,
-            url
-         } = req.body;
+        const { name, gender, phno, email } = req.body;
 
         if (!token) {
             return res.status(401).send({ message: 'unauthenticated' });
@@ -96,8 +143,6 @@ router.put('/edit-profile', async (req, res) => {
         user.gender = gender;
         user.phno = phno;
         user.email = email;
-        user.profilePicture = url;
-
         await user.save();
 
         res.send({ message: 'Profile updated successfully' });
@@ -106,5 +151,8 @@ router.put('/edit-profile', async (req, res) => {
         return res.status(401).send({ message: 'unauthenticated' });
     }
 });
+router.get('/', (req, res) => {
+    res.send('Hello World!')
+  })
 
 module.exports = router;
