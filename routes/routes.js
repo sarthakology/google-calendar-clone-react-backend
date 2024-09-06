@@ -122,7 +122,7 @@ router.put('/edit-profile', async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split(' ')[1];
-        const { name, gender, phno, email } = req.body;
+        const { name, gender, phno, email, imgURL } = req.body;
 
         if (!token) {
             return res.status(401).send({ message: 'unauthenticated' });
@@ -143,6 +143,7 @@ router.put('/edit-profile', async (req, res) => {
         user.gender = gender;
         user.phno = phno;
         user.email = email;
+        user.profilePicture = imgURL;
         await user.save();
 
         res.send({ message: 'Profile updated successfully' });
