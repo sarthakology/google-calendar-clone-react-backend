@@ -33,15 +33,15 @@ router.post('/register', async (req, res) => {
             email: req.body.email,
             password: hashedPassword
         });
-        const response = await newUser.save();
-        const { password, ...data } = await response.toJSON();
-        res.send(data);
+        await newUser.save();
+
+        res.send({ message: 'registeration successfull'});
     } catch (error) {
         res.status(500).send({ message: 'Error registering user', error: error.message });
     }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/token', async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
@@ -56,13 +56,12 @@ router.post('/login', async (req, res) => {
     const refreshToken = generateRefreshToken(user);
 
     res.send({
-        message: 'success',
         accessToken: accessToken,
         refreshToken: refreshToken
     });
 });
 
-router.post('/token', (req, res) => {
+router.post('/refreshToken', (req, res) => {
     // Extract the refresh token from the request body
     const refreshToken = req.body.refreshToken;
 
@@ -90,7 +89,7 @@ router.post('/token', (req, res) => {
     });
 });
 
-router.get('/user', async (req, res) => {
+router.get('/get/user', async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split(' ')[1];
@@ -118,11 +117,11 @@ router.get('/user', async (req, res) => {
     }
 });
 
-router.put('/edit-profile', async (req, res) => {
+router.put('/update/user', async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split(' ')[1];
-        const { name, gender, phno, email, imgURL } = req.body;
+        const { name, gender, phno, email, profilePicture } = req.body;
 
         if (!token) {
             return res.status(401).send({ message: 'unauthenticated' });
@@ -143,7 +142,7 @@ router.put('/edit-profile', async (req, res) => {
         user.gender = gender;
         user.phno = phno;
         user.email = email;
-        user.profilePicture = imgURL;
+        user.profilePicture = profilePicture;
         await user.save();
 
         res.send({ message: 'Profile updated successfully' });
