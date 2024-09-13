@@ -13,7 +13,7 @@ const refreshTokens = [];
 
 // Function to generate an access token with a short expiration time 5sec
 const generateAccessToken = (user) => {
-    return jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '5s' });
+    return jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '5m' });
 };
 
 // Function to generate a refresh token with a expiration time 7 days
@@ -54,7 +54,7 @@ router.post('/token', async (req, res) => {
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
-
+ 
     res.send({
         accessToken: accessToken,
         refreshToken: refreshToken
@@ -151,6 +151,53 @@ router.put('/update/user', async (req, res) => {
         return res.status(401).send({ message: 'unauthenticated' });
     }
 });
+
+router.put('/save-event', async (req, res) => {
+    try {
+        // Extract the access token from the Authorization header
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+
+        // If no token is provided, return a 401 error (unauthenticated)
+        if (!token) {
+            return res.status(401).send({ message: 'unauthenticated' });
+        }
+
+        // Verify the access token
+        const claims = jwt.verify(token, JWT_SECRET);
+
+        // If token verification fails, return a 401 error (unauthenticated)
+        if (!claims) {
+            return res.status(401).send({ message: 'unauthenticated' });
+        }
+
+        // Find the user based on the decoded token's _id claim
+        const user = await User.findOne({ _id: claims._id });
+        if (!user) {
+            return res.status(404).send({ message: 'user not found' });
+        }
+
+        // Extract the events from the request body
+        const newEvents = req.body;
+        // Validate that the body contains an array of events
+        if (!Array.isArray(newEvents)) {
+            return res.status(400).send({ message: 'Invalid event data. Expected an array of events.' });
+        }
+
+        // Update the user's savedEvents with the new events (this can be either replacing or appending)
+        user.savedEvents = newEvents;
+
+        // Save the updated user document to the database
+        await user.save();
+
+        // Send a success response
+        res.send({ message: 'Events saved successfully' });
+    } catch (e) {
+        console.error('Error saving events:', e);
+        return res.status(500).send({ message: 'Internal server error' });
+    }
+});
+
 router.get('/', (req, res) => {
     res.send('Hello World!')
   })
