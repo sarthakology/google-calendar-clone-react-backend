@@ -2,6 +2,8 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const User = require('../models/user.js');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -174,8 +176,7 @@ router.put('/save-event', async (req, res) => {
     }
 });
 
-router.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+
+  
 
 module.exports = router;

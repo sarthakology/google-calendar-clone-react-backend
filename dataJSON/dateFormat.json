@@ -1,0 +1,5 @@
+[
+    { "id": 1, "format": "DD/MM/YYY" },
+    { "id": 2, "format": "YYYY-MM-DD" },
+    { "id": 3, "format": "MM/DD/YYYY" }
+]
