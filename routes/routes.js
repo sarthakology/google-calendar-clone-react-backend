@@ -110,7 +110,7 @@ router.put('/update/user', async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split(' ')[1];
-        const { name, gender, phno, email, profilePicture } = req.body;
+        const { name, gender,role, phno, email, profilePicture } = req.body;
 
         if (!token) {
             return res.status(401).send({ message: 'unauthenticated' });
@@ -129,6 +129,7 @@ router.put('/update/user', async (req, res) => {
 
         user.name = name;
         user.gender = gender;
+        user.role = role;
         user.phno = phno;
         user.email = email;
         user.profilePicture = profilePicture;

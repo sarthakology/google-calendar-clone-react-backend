@@ -41,6 +41,10 @@ const userDataSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    role: {
+        type: String,
+        default: "user"
+    },
     phno: {
         type: Number,
         default: 0
