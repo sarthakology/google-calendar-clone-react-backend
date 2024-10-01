@@ -1,6 +1,4 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
 const Language = require('../models/language');
 const Country = require('../models/country');
 const Timezone = require('../models/timezone');
