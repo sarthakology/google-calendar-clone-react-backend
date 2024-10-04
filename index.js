@@ -20,6 +20,15 @@ app.use(express.json())
 app.use('/auth', routes);
 app.use('/masters',mastersRoutes);
 
+app.delete('/event/delete/:id', (req, res) => {
+  const eventId = req.params.id;
+  
+  console.log(`Delete request received for Event ID: ${eventId}`);
+  console.log('Request body:', req.body);
+
+  // Send a response back to acknowledge the delete request
+  // res.status(200).json({ message: `Event ${eventId} deletion received` });
+});
 
 
 
