@@ -106,6 +106,34 @@ router.get('/get/user', async (req, res) => {
     }
 });
 
+router.get('/event', async (req, res) => {
+    try {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+  
+        if (!token) {
+            return res.status(401).send({ message: 'unauthenticated' });
+        }
+   
+        const claims = jwt.verify(token, JWT_SECRET);
+  
+        if (!claims) {
+            return res.status(401).send({ message: 'unauthenticated' });
+        }
+  
+        const user = await User.findOne({ _id: claims._id });
+        if (!user) {
+            return res.status(404).send({ message: 'user not found' });
+        }
+  
+        const { password, ...data } = await user.toJSON();
+        res.send(data.savedEvents);
+    } catch (e) {
+        console.error('Error:', e);
+        return res.status(401).send({ message: 'unauthenticated' });
+    }
+  });
+
 router.put('/update/user', async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
