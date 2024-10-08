@@ -1,5 +1,48 @@
 const mongoose = require('mongoose');
 
+// Task Schema
+const taskSchema = new mongoose.Schema({
+    id: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    date: {
+        type: Date,
+        required: true
+    },
+    startTime: {
+        type: String,
+        required: true
+    },
+    endTime: {
+        type: String,
+        required: true
+    },
+    duration: {
+        type: String,
+        required: true,
+        enum: ["all-day", "timed"] // Only allow specified values
+    },
+    description: {
+        type: String,
+        default: ""
+    },
+    reminder: {
+        type: String,
+        default: "No"
+    },
+    completed: {
+        type: Boolean,
+        default: false
+    }
+});
+
+// Event Schema
 const eventSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -24,6 +67,7 @@ const eventSchema = new mongoose.Schema({
     }
 });
 
+// User Data Schema
 const userDataSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -56,9 +100,14 @@ const userDataSchema = new mongoose.Schema({
     savedEvents: {
         type: [eventSchema],
         default: []
+    },
+    savedTasks: {
+        type: [taskSchema],
+        default: []
     }
 });
 
-const user = mongoose.model('users', userDataSchema);
+// User Model
+const User = mongoose.model('users', userDataSchema);
 
-module.exports = user;
+module.exports = User;

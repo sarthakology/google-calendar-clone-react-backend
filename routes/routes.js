@@ -133,6 +133,33 @@ router.get('/event', async (req, res) => {
         return res.status(401).send({ message: 'unauthenticated' });
     }
   });
+router.get('/task', async (req, res) => {
+    try {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+  
+        if (!token) {
+            return res.status(401).send({ message: 'unauthenticated' });
+        }
+   
+        const claims = jwt.verify(token, JWT_SECRET);
+  
+        if (!claims) {
+            return res.status(401).send({ message: 'unauthenticated' });
+        }
+  
+        const user = await User.findOne({ _id: claims._id });
+        if (!user) {
+            return res.status(404).send({ message: 'user not found' });
+        }
+  
+        const { password, ...data } = await user.toJSON();
+        res.send(data.savedTasks);
+    } catch (e) {
+        console.error('Error:', e);
+        return res.status(401).send({ message: 'unauthenticated' });
+    }
+  });
 
 router.put('/update/user', async (req, res) => {
     try {
@@ -201,6 +228,40 @@ router.put('/save-event', async (req, res) => {
         res.send({ message: 'Events saved successfully' });
     } catch (e) {
         console.error('Error saving events:', e);
+        return res.status(500).send({ message: 'Internal server error' });
+    }
+});
+router.put('/save-task', async (req, res) => {
+    try {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+
+        if (!token) {
+            return res.status(401).send({ message: 'unauthenticated' });
+        }
+
+        const claims = jwt.verify(token, JWT_SECRET);
+
+        if (!claims) {
+            return res.status(401).send({ message: 'unauthenticated' });
+        }
+
+        const user = await User.findOne({ _id: claims._id });
+        if (!user) {
+            return res.status(404).send({ message: 'user not found' });
+        }
+
+        const newTasks = req.body; // Expecting an array of tasks
+        if (!Array.isArray(newTasks)) {
+            return res.status(400).send({ message: 'Invalid task data. Expected an array of tasks.' });
+        }
+
+        user.savedTasks = newTasks; // Update the user's saved tasks
+        await user.save();
+
+        res.send({ message: 'Tasks saved successfully' });
+    } catch (e) {
+        console.error('Error saving tasks:', e);
         return res.status(500).send({ message: 'Internal server error' });
     }
 });
