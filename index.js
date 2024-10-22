@@ -29,10 +29,27 @@ app.get('/search/:email', async (req, res) => {
 
   try {
     const user = await User.findOne({ email: email });
-
+    console.log(user.accountStatus)
     if (user) {
-      // User found, send user data as response
-      res.status(200).json(user);
+      // Check if the account is private
+      if (user.accountStatus === 'Private') {
+        // Send limited information for private accounts
+        const privateUserData = {
+          name: user.name,
+          gender: user.gender,
+          email: user.email,
+          phno: 'xxxxxxxxxx', // Mask phone number
+          role: user.role,
+          profilePicture: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg', // Default profile picture
+          savedEvents:[],
+          savedTasks:[]
+        };
+        console.log("run")
+        res.status(200).json(privateUserData);
+      } else {
+        // Send full user data for public accounts
+        res.status(200).json(user);
+      }
     } else {
       // User not found
       res.status(404).json({ message: 'User not found' });
@@ -42,6 +59,7 @@ app.get('/search/:email', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
  
 
 

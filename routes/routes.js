@@ -161,11 +161,11 @@ router.get('/task', async (req, res) => {
     }
   });
 
-router.put('/update/user', async (req, res) => {
+  router.put('/update/user', async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split(' ')[1];
-        const { name, gender,role, phno, email, profilePicture } = req.body;
+        const { name, gender, phno, email, profilePicture, accountStatus } = req.body;
 
         if (!token) {
             return res.status(401).send({ message: 'unauthenticated' });
@@ -182,20 +182,23 @@ router.put('/update/user', async (req, res) => {
             return res.status(404).send({ message: 'user not found' });
         }
 
+
         user.name = name;
         user.gender = gender;
-        user.role = role;
         user.phno = phno;
         user.email = email;
         user.profilePicture = profilePicture;
+        user.accountStatus = accountStatus;
+
         await user.save();
 
         res.send({ message: 'Profile updated successfully' });
     } catch (e) {
         console.error('Error:', e);
-        return res.status(401).send({ message: 'unauthenticated' });
+        return res.status(500).send({ message: 'Error updating profile' });
     }
 });
+
 
 router.put('/save-event', async (req, res) => {
     try {

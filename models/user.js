@@ -87,7 +87,8 @@ const userDataSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: "user"
+        default: "user",
+        enum: ["user", "admin"]
     },
     phno: {
         type: Number,
@@ -104,6 +105,11 @@ const userDataSchema = new mongoose.Schema({
     savedTasks: {
         type: [taskSchema],
         default: []
+    },
+    accountStatus: {
+        type: String,
+        default: "Public",
+        enum: ["Private", "Public"]
     }
 });
 
