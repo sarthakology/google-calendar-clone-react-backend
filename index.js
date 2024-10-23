@@ -33,7 +33,7 @@ app.get('/search/:email', async (req, res) => {
     if (user) {
       // Check if the account is private
       if (user.accountStatus === 'Private') {
-        // Send limited information for private accounts
+        // Send limited information for private accounts 
         const privateUserData = {
           name: user.name,
           gender: user.gender,
