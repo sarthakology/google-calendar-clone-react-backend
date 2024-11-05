@@ -3,8 +3,91 @@ const Language = require('../models/language');
 const Country = require('../models/country');
 const Timezone = require('../models/timezone');
 const DateFormat = require('../models/dateFormat'); // Import DateFormat model
-
 const router = express.Router();
+// Backend API Routes Documentation
+// ------------------------ Languages ------------------------ //
+
+// GET `/languages`
+//    - Retrieves all languages from the database.
+//    - Response: Array of language objects or an error message on failure.
+
+// POST `/language/create`
+//    - Adds a new language to the database.
+//    - Request body: `{ language }`
+//    - Response: `{ message: 'Language created successfully!' }` and the new language object, or an error if creation fails.
+
+// PUT `/language/update/:id`
+//    - Updates a specific language by ID.
+//    - Request body: `{ language }`
+//    - Response: `{ message: 'Language updated successfully!' }` and the updated language object, or an error if the update fails.
+
+// DELETE `/language/delete/:id`
+//    - Deletes a specific language by ID.
+//    - Response: `{ message: 'Language deleted successfully!' }` or an error if deletion fails.
+
+// ------------------------ Countries ------------------------ //
+
+// GET `/countries`
+//    - Retrieves all countries from the database.
+//    - Response: Array of country objects or an error message on failure.
+
+// POST `/country/create`
+//    - Adds a new country to the database.
+//    - Request body: `{ country }`
+//    - Response: `{ message: 'Country created successfully!' }` and the new country object, or an error if creation fails.
+
+// PUT `/country/update/:id`
+//    - Updates a specific country by ID.
+//    - Request body: `{ country }`
+//    - Response: `{ message: 'Country updated successfully!' }` and the updated country object, or an error if the update fails.
+
+// DELETE `/country/delete/:id`
+//    - Deletes a specific country by ID.
+//    - Response: `{ message: 'Country deleted successfully!' }` or an error if deletion fails.
+
+// ------------------------ Timezones ------------------------ //
+
+// GET `/timezones`
+//    - Retrieves all timezones from the database.
+//    - Response: Array of timezone objects or an error message on failure.
+
+// POST `/timezone/create`
+//    - Adds a new timezone to the database.
+//    - Request body: `{ timezone }`
+//    - Response: `{ message: 'Timezone created successfully!' }` and the new timezone object, or an error if creation fails.
+
+// PUT `/timezone/update/:id`
+//    - Updates a specific timezone by ID.
+//    - Request body: `{ timezone }`
+//    - Response: `{ message: 'Timezone updated successfully!' }` and the updated timezone object, or an error if the update fails.
+
+// DELETE `/timezone/delete/:id`
+//    - Deletes a specific timezone by ID.
+//    - Response: `{ message: 'Timezone deleted successfully!' }` or an error if deletion fails.
+
+// ------------------------ Date Format ------------------------ //
+
+// GET `/date-formats`
+//    - Retrieves all date formats from the database.
+//    - Response: Array of date format objects or an error message on failure.
+
+// POST `/date-format/create`
+//    - Adds a new date format to the database.
+//    - Request body: `{ format }`
+//    - Response: `{ message: 'Date format created successfully!' }` and the new date format object, or an error if creation fails.
+
+// PUT `/date-format/update/:id`
+//    - Updates a specific date format by ID.
+//    - Request body: `{ format }`
+//    - Response: `{ message: 'Date format updated successfully!' }` and the updated date format object, or an error if the update fails.
+
+// DELETE `/date-format/delete/:id`
+//    - Deletes a specific date format by ID.
+//    - Response: `{ message: 'Date format deleted successfully!' }` or an error if deletion fails.
+
+
+
+
 
 // ------------------------ Languages ------------------------ //
 
