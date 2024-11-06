@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const mongoURL = 'mongodb://localhost:27017/GoogleCalendar';
+const mongoURL = 'mongodb+srv://thesarthakchauhan:XIyoZe8VpbtF2czU@cluster0.cxpgt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 mongoose.connect(mongoURL)
     .then(() => console.log("Connected to MongoDB server"))
@@ -13,3 +13,4 @@ db.on('disconnected', () => {
 });
 
 module.exports = db;
+  
