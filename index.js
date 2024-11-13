@@ -14,7 +14,7 @@ const searchRoute = require('./routes/searchRoute.js')
 app.use(cookieParser()) 
 app.use(cors({
   credentials:true,
-  origin: 'http://localhost:8080'
+  origin: 'http://localhost:3000'
 }));
 app.use(express.json())
 app.use('/auth', routes);
