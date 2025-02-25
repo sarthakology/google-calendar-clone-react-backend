@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
-const port = 8083
+const port = process.env.PORT || 8083;
 const db = require('./db');
 const cors = require('cors');
 const cookieParser = require('cookie-parser')
