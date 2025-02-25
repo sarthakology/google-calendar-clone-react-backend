@@ -1,7 +1,7 @@
 const express = require('express');
 const Language = require('../models/language');
 const Country = require('../models/country');
-const Timezone = require('../models/timezone');
+const Timezone = require('../models/timeZone');
 const DateFormat = require('../models/dateFormat'); // Import DateFormat model
 const router = express.Router();
 // Backend API Routes Documentation
