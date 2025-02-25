@@ -20,73 +20,8 @@ const generateRefreshToken = (user) => {
     refreshTokens.push(refreshToken);
     return refreshToken;
 };
-// Backend API Routes Documentation
 
-// 1. POST `/register`
-//    - Registers a new user by hashing their password and saving their details in the database.
-//    - Request body: `{ email, password }`
-//    - Response: `{ message: 'registration successful' }` or an error message on failure.
-
-// 2. POST `/login`
-//    - Authenticates a user and generates an access token and refresh token on successful login.
-//    - Request body: `{ email, password }`
-//    - Response: `{ accessToken, refreshToken }` or an error if credentials are invalid.
-
-// 3. POST `/refreshToken`
-//    - Generates a new access token using a valid refresh token.
-//    - Request body: `{ refreshToken }`
-//    - Response: `{ accessToken }` or an error if the refresh token is invalid.
-
-// 4. GET `user-data`
-//    - Retrieves the authenticated user's profile information, excluding the password.
-//    - Requires `Authorization` header with access token.
-//    - Response: User profile data or an error if unauthorized.
-
-// 5. GET `/event`
-//    - Retrieves the authenticated user's saved events.
-//    - Requires `Authorization` header with access token.
-//    - Response: Array of events or an error if unauthorized.
-
-// 6. GET `/task`
-//    - Retrieves the authenticated user's saved tasks.
-//    - Requires `Authorization` header with access token.
-//    - Response: Array of tasks or an error if unauthorized.
-
-// 7. PUT `/update/user`
-//    - Updates the authenticated user's profile information (name, gender, phone, email, profile picture, and account status).
-//    - Requires `Authorization` header with access token.
-//    - Request body: `{ name, gender, phno, email, profilePicture, accountStatus }`
-//    - Response: `{ message: 'Profile updated successfully' }` or an error if update fails.
-
-// 8. PUT `/save-event`
-//    - Saves or updates an array of events in the authenticated user's profile.
-//    - Requires `Authorization` header with access token.
-//    - Request body: Array of events
-//    - Response: `{ message: 'Events saved successfully' }` or an error if data is invalid.
-
-// 9. PUT `/save-task`
-//    - Saves or updates an array of tasks in the authenticated user's profile.
-//    - Requires `Authorization` header with access token.
-//    - Request body: Array of tasks
-//    - Response: `{ message: 'Tasks saved successfully' }` or an error if data is invalid.
-
-router.post('/register', async (req, res) => {
-    try {
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(req.body.password, salt);
-        const newUser = new User({
-            email: req.body.email,
-            password: hashedPassword
-        });
-        await newUser.save();
-
-        res.send({ message: 'registration successful' });
-    } catch (error) {
-        res.status(500).send({ message: 'Error registering user', error: error.message });
-    }
-});
-
-router.post('/login', async (req, res) => {
+router.post('/token', async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
@@ -99,12 +34,29 @@ router.post('/login', async (req, res) => {
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
-
+console.log("bhai ander")
     res.send({
         accessToken: accessToken,
         refreshToken: refreshToken
     });
 });
+
+router.post('/register', async (req, res) => {
+    try {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+        const newUser = new User({
+            email: req.body.email,
+            password: hashedPassword 
+        });
+        await newUser.save();
+console.log("bhai created")
+        res.send({ message: 'registration successful' });
+    } catch (error) {
+        res.status(500).send({ message: 'Error registering user', error: error.message });
+    }
+});
+
 
 router.post('/refreshToken', (req, res) => {
     const refreshToken = req.body.refreshToken;
@@ -127,7 +79,7 @@ router.post('/refreshToken', (req, res) => {
     });
 });
 
-router.get('/user-data', async (req, res) => {
+router.get('/get/user', async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split(' ')[1];

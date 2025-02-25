@@ -19,8 +19,8 @@ app.use(cors({
 app.use(express.json())
 app.use('/auth', routes);
 app.use('/masters',mastersRoutes);
-app.use('/admin',adminRoutes);
-app.use('/search',searchRoute);
+app.use('/auth/admin',adminRoutes);
+app.use('/auth/search',searchRoute);
 
 
 app.listen(port, () => {

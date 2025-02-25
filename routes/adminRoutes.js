@@ -40,23 +40,22 @@ const User = require('../models/user.js');
     }
   });
 
-  router.delete('/delete-user', async (req, res) => {
+  router.delete('/delete/:email', async (req, res) => {
     try {
-  
-      const { email } = req.body;
-  
-      const user = await User.findOneAndDelete({ email });
-  
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-  
-      res.json({ message: `User with email ${email} deleted successfully` });
+        const email = req.params.email;
+
+        const user = await User.findOneAndDelete({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({ message: `User with email ${email} deleted successfully` });
     } catch (error) {
-      console.error('Error deleting user:', error);
-      return res.status(500).json({ message: 'Error deleting user' });
+        console.error('Error deleting user:', error);
+        return res.status(500).json({ message: 'Error deleting user' });
     }
-  });
+});
 
 
 

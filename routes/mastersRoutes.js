@@ -92,7 +92,7 @@ const router = express.Router();
 // ------------------------ Languages ------------------------ //
 
 // GET request to fetch all languages
-router.get('/languages', async (req, res) => {
+router.get('/language', async (req, res) => {
     try {
         const languages = await Language.find();
         res.json(languages);
@@ -101,7 +101,7 @@ router.get('/languages', async (req, res) => {
     }
 });
 
-// POST request to create a new language
+// POST request to create a new language 
 router.post('/language/create', async (req, res) => {
     const { language } = req.body;
 
@@ -122,7 +122,7 @@ router.post('/language/create', async (req, res) => {
     }
 });
 
-// PUT request to update a language by ID
+// PUT request to update a language by ID 
 router.put('/language/update/:id', async (req, res) => {
     const { id } = req.params;
     const { language } = req.body;
@@ -148,7 +148,7 @@ router.put('/language/update/:id', async (req, res) => {
     }
 });
 
-// DELETE request to delete a language by ID
+// DELETE request to delete a language by ID 
 router.delete('/language/delete/:id', async (req, res) => {
     const { id } = req.params;
 
@@ -168,7 +168,7 @@ router.delete('/language/delete/:id', async (req, res) => {
 // ------------------------ Countries ------------------------ //
 
 // GET request to fetch all countries
-router.get('/countries', async (req, res) => {
+router.get('/country', async (req, res) => {
     try {
         const countries = await Country.find();
         res.json(countries);
@@ -244,7 +244,7 @@ router.delete('/country/delete/:id', async (req, res) => {
 // ------------------------ Timezones ------------------------ //
 
 // GET request to fetch all timezones
-router.get('/timezones', async (req, res) => {
+router.get('/timezone', async (req, res) => {
     try {
         const timezones = await Timezone.find();
         res.json(timezones);
@@ -321,7 +321,7 @@ router.delete('/timezone/delete/:id', async (req, res) => {
 // ------------------------ Date Format ------------------------ //
 
 // GET request to fetch all date formats from MongoDB
-router.get('/date-formats', async (req, res) => {
+router.get('/date-format', async (req, res) => {
     try {
         const dateFormats = await DateFormat.find();
         res.json(dateFormats);
