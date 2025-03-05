@@ -232,7 +232,7 @@ router.put('/save-event', async (req, res) => {
         res.send({ message: 'Events saved successfully' });
     } catch (e) {
         console.error('Error saving events:', e);
-        return res.status(500).send({ message: 'Internal server error' });
+        // return res.status(500).send({ message: 'Internal server error' });
     }
 });
 router.put('/save-task', async (req, res) => {
@@ -264,7 +264,7 @@ router.put('/save-task', async (req, res) => {
         res.send({ message: 'Tasks saved successfully' });
     } catch (e) {
         console.error('Error saving tasks:', e);
-        return res.status(500).send({ message: 'Internal server error' });
+        // return res.status(500).send({ message: 'Internal server error' });
     }
 });
 
