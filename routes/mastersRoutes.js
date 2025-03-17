@@ -276,7 +276,6 @@ router.post('/timezone/create', async (req, res) => {
 
 // PUT request to update a timezone by ID
 router.put('/timezone/update/:id', async (req, res) => {
-    console.log("run")
     const { id } = req.params;
     const { timezone } = req.body;
 

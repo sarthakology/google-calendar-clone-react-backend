@@ -34,7 +34,6 @@ router.post('/token', async (req, res) => {
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
-console.log("bhai ander")
     res.send({
         accessToken: accessToken,
         refreshToken: refreshToken
@@ -50,7 +49,6 @@ router.post('/register', async (req, res) => {
             password: hashedPassword 
         });
         await newUser.save();
-console.log("bhai created")
         res.send({ message: 'registration successful' });
     } catch (error) {
         res.status(500).send({ message: 'Error registering user', error: error.message });
