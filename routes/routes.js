@@ -262,7 +262,6 @@ router.put('/save-task', async (req, res) => {
         res.send({ message: 'Tasks saved successfully' });
     } catch (e) {
         console.error('Error saving tasks:', e);
-        // return res.status(500).send({ message: 'Internal server error' });
     }
 });
 

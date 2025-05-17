@@ -22,6 +22,9 @@ app.use('/masters',mastersRoutes);
 app.use('/auth/admin',adminRoutes);
 app.use('/auth/search',searchRoute);
 
+app.get('/', (req, res) => {
+  res.send('Calender server is running');
+});
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`)
